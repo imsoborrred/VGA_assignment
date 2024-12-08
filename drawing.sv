@@ -3,24 +3,27 @@
 module drawing(
 input logic clk,
 input logic reset,
-input logic in_bit,
+input logic BTNC,
+input logic BTNU,
 input logic s_color,
 input logic en_counter,
 output logic f,
-    
+output logic y_reset,    
 //counter output    
 output logic [7:0]x,
 output logic [6:0]y,
 output logic [2:0]color
     );
-    
+//wire f ;    
 //controller
 controller fsm(  
 
     .clk(clk),
     .reset(reset),
-    .in_bit(in_bit),
+    .BTNC(BTNC),
+    .BTNU(BTNU),
     .f(f),
+    .y_reset(y_reset),
     .s(s_color),
     .en_counter(en_counter)
 
@@ -34,15 +37,16 @@ controller fsm(
 logic com1,com2;
 
 
-n_counter c1(
+x_counter c1(
     .clk(clk),
-    .reset(~com1),
+    .reset(reset),
     .en(en_counter),
+    .com1(com1),
     .count(x)
 );
 
 //logic [7:0]compp;
-assign com1 = (x>159);
+assign com1 = (x==159);
 assign com2 = (x==159);
 
 
@@ -55,8 +59,8 @@ assign com2 = (x==159);
      
 //    );
 
-   assign f = (x==159 & y==119) & reset;
-   
+   assign f = (x==159 & y==119) ;
+//   assign y_reset = (y==119) ;
    logic f_ff; // delated f
    always @(posedge clk, negedge reset)
    begin 
@@ -67,17 +71,18 @@ assign com2 = (x==159);
    //counter C2   
 n_counter c2(
     .clk(clk),
-    .reset(~f_ff),
+    .reset(reset),
+    .y_reset(y_reset),
     .en(com2),
     .count(y)
 );        
 // comp 2
-comparator comparator_inst2(
-     .number(y),
-     .match(119), //8'01110111 //119
-     .comp_out(comb2)
+//comparator comparator_inst2(
+//     .number(y),
+//     .match(119), //8'01110111 //119
+//     .comp_out(comb2)
      
-    );     
+//    );     
 // comp 3
 //comparator comparator_inst3(
 //     .number(comb1),

@@ -6,7 +6,8 @@ module fpga_top(
     output wire [3:0] VGA_B,     // VGA blue channel output
     output wire VGA_HS,          // VGA horizontal sync
     output wire VGA_VS,           // VGA vertical sync
-    input wire CPU_RESETN,BTNC,BTNR
+    //input logic SW[15:0],
+    input wire CPU_RESETN,BTNC,BTNR,BTNU
     );
         logic clk,plot;
         logic reset_n;
@@ -32,12 +33,13 @@ vga_core vga_instance(
 drawing roqi(
     .clk(clk),
     .reset(reset_n),
-    .in_bit(BTNC),
-    .s_color(),
-    .en_counter,
-    .f,    
-    .x,
-    .y,
-    .color
+    .BTNC(BTNC),
+    .BTNU(BTNU),
+    //.s_color(SW[0]),
+    .en_counter(plot),
+    //.f(plot),    
+    .x(x),
+    .y(y),
+    .color(color)
 );    
 endmodule

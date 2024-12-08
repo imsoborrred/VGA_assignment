@@ -5,7 +5,8 @@ module drawing_tb;
     // Inputs to the DUT
     logic clk;
     logic reset;
-    logic in_bit;
+    logic BTNC;
+    logic BTNU;
     logic s_color;
     logic en_counter;
 
@@ -20,7 +21,8 @@ module drawing_tb;
     drawing uut (
         .clk(clk),
         .reset(reset),
-        .in_bit(in_bit),
+        .BTNC(BTNC),
+         .BTNU(BTNU),
         .s_color(s_color),
         .en_counter(en_counter),
         .f(f),
@@ -39,7 +41,7 @@ module drawing_tb;
     initial begin
         // Initialize inputs
         reset = 1'b0;
-        in_bit = 1'b0;
+        BTNC = 1'b0;
         s_color = 1'b0;
         en_counter = 1'b0;
 
@@ -52,8 +54,8 @@ module drawing_tb;
         #10 en_counter = 1'b1;
 
         // Change input bits and observe outputs
-        #20 in_bit = 1'b1;
-        #20 in_bit = 1'b0;
+        #20 BTNC = 1'b1; BTNU = 0;
+        #20 BTNC = 1'b0; BTNU = 0;
         #20 s_color = 1'b1; // Enable color drawing
         #20 s_color = 1'b0; // Disable color drawing
 

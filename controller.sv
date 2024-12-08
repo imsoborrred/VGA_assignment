@@ -4,9 +4,11 @@ module controller(
 
     input logic clk,
     input logic reset,
-    input logic in_bit,
+    input logic BTNC,
+    input logic BTNU,
     input logic f,
     output logic s,
+    output logic y_reset,
     output logic en_counter
     
     );
@@ -24,10 +26,11 @@ always_ff@(posedge clk or negedge reset)begin
     else
          current_state <= next_state ;
     end
+  
 // next state logic 
 always_comb begin 
     case(current_state)
-    IDLE : next_state = in_bit ? draw : black;    
+    IDLE : next_state = BTNC? black:(BTNU? draw:IDLE);    
     draw : next_state = f ? IDLE : draw; 
     black:  next_state = f ? IDLE : black;   
     default: next_state = IDLE;
@@ -38,15 +41,20 @@ always_comb begin
   // output logic   
 always_comb begin 
     case(current_state)
-    IDLE : en_counter=0;
+    IDLE : begin
+           en_counter=0;
+           y_reset = 1;
+           end
     draw : begin
            en_counter=1;
            s = 0 ;
+           y_reset = 0;
            end
            
     black: begin
            en_counter=1;
            s = 1;
+           y_reset = 0;
            end
            
    
